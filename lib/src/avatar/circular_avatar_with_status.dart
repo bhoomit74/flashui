@@ -1,3 +1,4 @@
+import 'package:flashui/extensions/widget_extensions/general_widget_extensions.dart';
 import 'package:flashui/utils/avatar_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,14 @@ class FlCircularAvatarWithStatus extends StatelessWidget {
   ///default color is white,You can pass transparent color to hide border.
   final Color statusBorderColor;
 
+  final double statusBorderWidth;
+
+  final dynamic data;
+
+  final Function? onAvatarClick;
+
+  final Function? onStatusClick;
+
   ///Load circular avatar using network url
   const FlCircularAvatarWithStatus(
       {Key? key,
@@ -32,7 +41,11 @@ class FlCircularAvatarWithStatus extends StatelessWidget {
       this.statusIcon,
       required this.statusBackgroundColor,
       this.statusBorderColor = Colors.white,
-      this.statusSize = 16})
+      this.statusBorderWidth = 2,
+      this.statusSize = 16,
+      this.data,
+      this.onAvatarClick,
+      this.onStatusClick})
       : super(key: key);
 
   @override
@@ -51,19 +64,38 @@ class FlCircularAvatarWithStatus extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          if (onAvatarClick != null) ...[
+            Positioned.fill(
+                child: ClipOval(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.white24,
+                  hoverColor: Colors.transparent,
+                  onTap: () {
+                    onAvatarClick?.call(data);
+                  },
+                ),
+              ),
+            ))
+          ],
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
-                width: statusSize,
-                height: statusSize,
-                margin: EdgeInsets.only(
-                    bottom: AvatarUtils.getStatusPadding(size, statusSize),
-                    right: AvatarUtils.getStatusPadding(size, statusSize)),
-                decoration: BoxDecoration(
-                    border: Border.all(color: statusBorderColor, width: 1),
-                    shape: BoxShape.circle,
-                    color: statusBackgroundColor),
-                child: Center(child: statusIcon)),
+                    width: statusSize,
+                    height: statusSize,
+                    margin: EdgeInsets.only(
+                        bottom: AvatarUtils.getStatusPadding(size, statusSize),
+                        right: AvatarUtils.getStatusPadding(size, statusSize)),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: statusBorderColor, width: statusBorderWidth),
+                        shape: BoxShape.circle,
+                        color: statusBackgroundColor),
+                    child: Center(child: statusIcon))
+                .onClick(() {
+              onStatusClick?.call();
+            }),
           ),
         ],
       ),

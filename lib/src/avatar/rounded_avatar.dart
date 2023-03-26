@@ -1,3 +1,4 @@
+import 'package:flashui/extensions/widget_extensions/general_widget_extensions.dart';
 import 'package:flutter/material.dart';
 
 class FlRoundedAvatar extends StatelessWidget {
@@ -16,15 +17,18 @@ class FlRoundedAvatar extends StatelessWidget {
   //default radius is 8
   final double borderRadius;
 
+  final Function()? onAvatarClick;
+
   ///Load Rounded border avatar from network url
-  const FlRoundedAvatar({
-    Key? key,
-    this.width = 64,
-    this.height = 64,
-    required this.imageUrl,
-    required this.placeHolder,
-    this.borderRadius = 8,
-  }) : super(key: key);
+  const FlRoundedAvatar(
+      {Key? key,
+      this.width = 64,
+      this.height = 64,
+      required this.imageUrl,
+      required this.placeHolder,
+      this.borderRadius = 8,
+      this.onAvatarClick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,8 @@ class FlRoundedAvatar extends StatelessWidget {
         image: imageUrl,
         fit: BoxFit.cover,
       ),
-    );
+    ).onClick(() {
+      onAvatarClick?.call();
+    });
   }
 }
