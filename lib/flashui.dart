@@ -1,3 +1,3 @@
 library flashui;
 
-export 'src/avatar/circular_avatar.dart';
+export 'src/avatar/avatar.dart';
